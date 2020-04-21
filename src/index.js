@@ -1,5 +1,5 @@
 import './styles/style.scss';
-
+import './scripts/init_firebase.js';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Quote from './components/Quote.jsx';

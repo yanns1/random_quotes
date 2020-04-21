@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react'
+import { db, auth } from '../scripts/init_firebase'
 
 function Quote() {
     // Collections from Firestore database
-    const quoteCollection = db.collection('quotes');
-    const colorCollection = db.collection('colors');
+    const quoteCollection = db.collection('users');
+    // const colorCollection = db.collection('colors');
 
     const [text, setText] = useState('');
     const [author, setAuthor] = useState('');

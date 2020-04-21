@@ -36,8 +36,10 @@
     "webpack-dev-server": "^3.10.3"
   },
   "dependencies": {
+    "firebase": "^7.14.1",
     "ramda": "^0.27.0",
     "react": "^16.13.1",
-    "react-dom": "^16.13.1"
+    "react-dom": "^16.13.1",
+    "react-firebaseui": "^4.1.0"
   }
 }
