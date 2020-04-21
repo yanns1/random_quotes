@@ -1,0 +1,107 @@
+@import "./normalize.scss";
+@import url("https://fonts.googleapis.com/css?family=Raleway&display=swap"); // Raleway font
+
+:root {
+  --primary: rgb(145, 145, 86);
+  --raleway: "Raleway", sans-serif;
+}
+
+.wrapper {
+  min-height: 100vh;
+  background: var(--primary);
+  color: var(--primary);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+#quote-box {
+  min-height: min-content;
+  width: 100%;
+  background: white;
+  margin: 1rem 2rem;
+
+  font-family: var(--raleway);
+  border-radius: 3px;
+  box-shadow: 0 0.6rem 1.2rem rgba(0, 0, 0, 0.19),
+    0 0.4rem 0.4rem rgba(0, 0, 0, 0.23);
+}
+
+#text {
+  margin: 3rem 3rem;
+  font-size: 1.75em;
+  font-weight: 500;
+
+  & > i {
+    font-size: 1em;
+    margin-right: 0.4em;
+  }
+}
+
+#author {
+  margin: 1rem 2rem;
+
+  display: flex;
+  justify-content: flex-end;
+
+  font-size: 1em;
+}
+
+#new-quote {
+  margin: 1rem 2rem;
+  display: flex;
+  justify-content: space-between;
+}
+
+#button-quote {
+  background: var(--primary);
+  padding: 0.6em 1em;
+
+  color: white;
+  border-radius: 3px;
+  // Pour enlever le default border
+  border: none;
+  cursor: pointer;
+
+  &:hover {
+    opacity: 0.9;
+  }
+
+  // Pour enlever le border bleu on focus
+  &:focus {
+    outline: 0;
+  }
+}
+
+#tweet-quote {
+  background: var(--primary);
+  padding: 0.4em;
+
+  color: white;
+  border-radius: 3px;
+  // Pour enlever le default border
+  border: none;
+  text-decoration: none;
+  cursor: pointer;
+
+  &:hover {
+    opacity: 0.9;
+  }
+
+  // Pour enlever le border bleu on focus
+  &:focus {
+    outline: 0;
+  }
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+@media (min-width: 1000px) {
+  #quote-box {
+    width: 50%;
+  }
+}
