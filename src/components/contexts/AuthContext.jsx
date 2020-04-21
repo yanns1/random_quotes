@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { auth } from '../../scripts/init_firebase'
 const AuthContext = React.createContext()
 
 /**

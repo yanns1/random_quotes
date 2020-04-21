@@ -27,7 +27,6 @@ const auth = firebase.auth();
 const uiConfig = {
     signInSuccessUrl: "http://localhost:8080/",
     signInOptions: [
-        // Leave the lines as is for the providers you want to offer your users.
         firebase.auth.GoogleAuthProvider.PROVIDER_ID,
         firebase.auth.GithubAuthProvider.PROVIDER_ID,
         firebase.auth.EmailAuthProvider.PROVIDER_ID,
@@ -35,4 +34,4 @@ const uiConfig = {
     signInFlow: "popup",
 };
 
-export { db, auth }
+export { db, auth, uiConfig }

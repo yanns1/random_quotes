@@ -1,4 +1,5 @@
 import React, { useContext } from 'react'
+import { auth, uiConfig } from '../scripts/init_firebase.js'
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth'
 import firebase from 'firebase'
 import { AuthContext } from './contexts/AuthContext.jsx'
@@ -20,11 +21,12 @@ function Header() {
                     </>
                     :
                     <>
-                        <li>Sign up</li>
-                        <li>Login</li>
+                        <li>Sign in</li>
+
                     </>
                 }
             </nav>
+            <StyledFirebaseAuth uiConfig={uiConfig} firebaseAuth={auth} />
         </div>
     )
 }
