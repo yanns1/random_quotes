@@ -1,11 +1,12 @@
 import React from 'react'
-import FirebaseUI from './FirebaseUI.jsx'
+import FirebaseUI from '../FirebaseUI.jsx'
 
 const AuthDialog = () => {
     const closeDialog = () => {
         const authDialog = document.querySelector('.auth-dialog');
         authDialog.close();
     }
+
     return (
         <dialog className="auth-dialog mdl-dialog">
             <h3 className="mdl-dialog__title">Sign In</h3>
