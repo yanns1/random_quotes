@@ -1,3 +1,6 @@
+// For compiling generators and async arrow functions
+// (regeneratorRuntime available globally)
+import "regenerator-runtime/runtime.js";
 import './styles/style.scss';
 import './scripts/init_firebase.js';
 import React from 'react';
