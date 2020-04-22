@@ -9,6 +9,8 @@ const SettingsDialog = () => {
     const [colorAddedMess, setColorAddedMess] = useState('')
     const [colorDeletedMess, setColorDeletedMess] = useState('')
 
+    const isErrorMess = mess => /^Error/.test(mess)
+
     const closeDialog = () => {
         const authDialog = document.querySelector('.settings-dialog');
         authDialog.close();
@@ -38,16 +40,18 @@ const SettingsDialog = () => {
                 <AddQuote
                     quoteAddedMess={quoteAddedMess}
                     setQuoteAddedMess={setQuoteAddedMess}
+                    isErrorMess={isErrorMess}
                 >
                 </AddQuote>
                 <AddColor
                     colorAddedMess={colorAddedMess}
                     setColorAddedMess={setColorAddedMess}
+                    isErrorMess={isErrorMess}
                 >
                 </AddColor>
                 <DeleteColors
                     colorDeletedMess={colorDeletedMess}
-                    setColorDeletedMess={setColorDeletedMess}
+                    setColorDeletedMess={setColorDeletedMess}                    isErrorMess={isErrorMess}
                 >
                 </DeleteColors>
             </div>

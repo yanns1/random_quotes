@@ -1,15 +1,15 @@
-import React, { useState, useContext } from 'react'
+import React, { useContext } from 'react'
 import { firebase, db } from '../../../../scripts/init_firebase.js'
 import { AuthContext } from '../../../contexts/AuthContext.jsx'
 
 const AddQuote = ({
     quoteAddedMess,
-    setQuoteAddedMess
+    setQuoteAddedMess,
+    isErrorMess
 }) => {
     // Contexts
     const { userCred } = useContext(AuthContext)
 
-    const isQuoteMessError = mess => /^Error/.test(mess)
 
     const pushQuoteToDb = e => {
         e.preventDefault()
@@ -33,10 +33,10 @@ const AddQuote = ({
         }).then(() => {
             setQuoteAddedMess(() => 'Quote successfully added !')
         })
-            .catch(err => {
-                setQuoteAddedMess(() => 'Error: Quote has not been added !')
-                console.error(`Error during transaction for adding quote (either getting doc or updating it): ${err}`)
-            })
+        .catch(err => {
+            setQuoteAddedMess(() => 'Error: Quote has not been added !')
+            console.error(`Error during transaction for adding quote (either getting doc or updating it): ${err}`)
+        })
     }
 
     return (
@@ -54,7 +54,7 @@ const AddQuote = ({
                 <button type="submit">Add quote</button>
                 {quoteAddedMess
                     ?
-                    <div className={isQuoteMessError(quoteAddedMess) ? 'quote-message error' : 'quote-message success'}>{quoteAddedMess}</div>
+                    <div className={isErrorMess(quoteAddedMess) ? 'err-mess' : 'success-mess'}>{quoteAddedMess}</div>
                     : null
                 }
             </form>
