@@ -3,7 +3,7 @@ import { auth } from '../../scripts/init_firebase.js'
 import { AuthContext } from '../contexts/AuthContext.jsx'
 import dialogPolyfill from 'dialog-polyfill'
 import AuthDialog from './dialogs/AuthDialog.jsx'
-import SettingsDialog from './dialogs/SettingsDialog.jsx'
+import SettingsDialog from './dialogs/SettingsDialog/SettingsDialog.jsx'
 import AccountDialog from './dialogs/AccountDialog.jsx'
 
 const Header = () => {
