@@ -6,7 +6,7 @@ const AuthContext = React.createContext()
  * @file Initiates the authentification context
  * @requires react
  */
-function AuthContextProvider({ children }) {
+const AuthContextProvider = ({ children }) => {
     const [userCred, setUserCred] = useState(null);
 
     auth.onAuthStateChanged(userCred => {

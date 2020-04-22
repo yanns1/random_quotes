@@ -4,10 +4,13 @@ import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth'
 import firebase from 'firebase'
 import { AuthContext } from './contexts/AuthContext.jsx'
 
-function Header() {
+const Header = () => {
     // Contexts
     const { userCred } = useContext(AuthContext)
 
+    function signOut() {
+        auth.signOut();
+    }
     return (
         <div className="header">
             <div className="logo">RQ</div>
@@ -15,13 +18,13 @@ function Header() {
                 {userCred
                     ?
                     <>
-                        <li>Logout</li>
-                        <div class="material-icons">account_circle</div>
-                        <div class="material-icons">settings</div>
+                        <li onClick={signOut}>Logout</li>
+                        <div className="material-icons">account_circle</div>
+                        <div className="material-icons">settings</div>
                     </>
                     :
                     <>
-                        <li>Sign in</li>
+                        <li onClick={signOut}>Sign in</li>
 
                     </>
                 }

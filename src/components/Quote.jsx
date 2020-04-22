@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { db, auth } from '../scripts/init_firebase'
 
-function Quote() {
+const Quote = () => {
     // Collections from Firestore database
     const quoteCollection = db.collection('users');
     // const colorCollection = db.collection('colors');

@@ -2,7 +2,7 @@ import React from 'react'
 import Header from './Header.jsx'
 import { AuthContextProvider } from './contexts/AuthContext.jsx'
 
-function App() {
+const App = () => {
     return (
         <AuthContextProvider>
             <Header></Header>
