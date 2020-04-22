@@ -1,16 +1,22 @@
 import React, { useContext } from 'react'
-import { auth, uiConfig } from '../scripts/init_firebase.js'
-import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth'
-import firebase from 'firebase'
-import { AuthContext } from './contexts/AuthContext.jsx'
+import { auth } from '../../scripts/init_firebase.js'
+import { AuthContext } from '../contexts/AuthContext.jsx'
+import dialogPolyfill from 'dialog-polyfill'
+import AuthDialog from './AuthDialog.jsx'
 
 const Header = () => {
     // Contexts
     const { userCred } = useContext(AuthContext)
 
-    function signOut() {
-        auth.signOut();
+    const showAuthDialog = () => {
+        const authDialog = document.querySelector('.auth-dialog');
+        if (!authDialog.showModal) {
+            dialogPolyfill.registerDialog(authDialog);
+        }
+        authDialog.showModal();
     }
+    const signOut = () => auth.signOut()
+
     return (
         <div className="header">
             <div className="logo">RQ</div>
@@ -24,12 +30,11 @@ const Header = () => {
                     </>
                     :
                     <>
-                        <li onClick={signOut}>Sign in</li>
-
+                        <AuthDialog></AuthDialog>
+                        <li onClick={showAuthDialog}>Sign in</li>
                     </>
                 }
             </nav>
-            <StyledFirebaseAuth uiConfig={uiConfig} firebaseAuth={auth} />
         </div>
     )
 }

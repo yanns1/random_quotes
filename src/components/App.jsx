@@ -1,5 +1,5 @@
 import React from 'react'
-import Header from './Header.jsx'
+import Header from './header/Header.jsx'
 import { AuthContextProvider } from './contexts/AuthContext.jsx'
 
 const App = () => {

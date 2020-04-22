@@ -22,16 +22,4 @@ firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 const auth = firebase.auth();
 
-// Initialize the FirebaseUI Widget using Firebase.
-// const ui = new firebaseui.auth.AuthUI(firebase.auth());
-const uiConfig = {
-    signInSuccessUrl: "http://localhost:8080/",
-    signInOptions: [
-        firebase.auth.GoogleAuthProvider.PROVIDER_ID,
-        firebase.auth.GithubAuthProvider.PROVIDER_ID,
-        firebase.auth.EmailAuthProvider.PROVIDER_ID,
-    ],
-    signInFlow: "popup",
-};
-
-export { db, auth, uiConfig }
+export { db, auth }
