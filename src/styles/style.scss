@@ -6,7 +6,7 @@
   --raleway: "Raleway", sans-serif;
 }
 
-.wrapper {
+#root {
   min-height: 100vh;
   background: var(--primary);
   color: var(--primary);
@@ -17,7 +17,16 @@
   flex-wrap: wrap;
 }
 
-#quote-box {
+.main {
+  flex: 1;
+}
+
+.header {
+  color: black;
+}
+
+// QUOTE CARD
+.quote-card {
   min-height: min-content;
   width: 100%;
   background: white;
@@ -29,7 +38,7 @@
     0 0.4rem 0.4rem rgba(0, 0, 0, 0.23);
 }
 
-#text {
+.quote-text {
   margin: 3rem 3rem;
   font-size: 1.75em;
   font-weight: 500;
@@ -39,40 +48,22 @@
     margin-right: 0.4em;
   }
 }
+.quote-author {
+  margin: 1rem 2rem;
 
-.color-checkboxes {
   display: flex;
-  justify-content: space-evenly;
-  flex-wrap: wrap;
+  justify-content: flex-end;
+
+  font-size: 1em;
 }
 
-.color-checkbox {
-  display: flex;
-  margin: 0.5rem;
-}
-
-.color-box {
-  width: 1rem;
-  height: 1rem;
-  margin: 0 0.3rem;
-}
-
-// #author {
-//   margin: 1rem 2rem;
-
-//   display: flex;
-//   justify-content: flex-end;
-
-//   font-size: 1em;
-// }
-
-#new-quote {
+.quote-footer {
   margin: 1rem 2rem;
   display: flex;
   justify-content: space-between;
 }
 
-#button-quote {
+.quote-new {
   background: var(--primary);
   padding: 0.6em 1em;
 
@@ -92,7 +83,7 @@
   }
 }
 
-#tweet-quote {
+.quote-tweet {
   background: var(--primary);
   padding: 0.4em;
 
@@ -117,8 +108,26 @@
   align-items: center;
 }
 
+// SETTINGS
+.color-checkboxes {
+  display: flex;
+  justify-content: space-evenly;
+  flex-wrap: wrap;
+}
+
+.color-checkbox {
+  display: flex;
+  margin: 0.5rem;
+}
+
+.color-box {
+  width: 1rem;
+  height: 1rem;
+  margin: 0 0.3rem;
+}
+
 @media (min-width: 1000px) {
-  #quote-box {
+  .quote-card {
     width: 50%;
   }
 }
