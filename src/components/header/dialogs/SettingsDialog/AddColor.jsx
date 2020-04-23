@@ -13,6 +13,7 @@ const AddColor = ({
 
     const pushColorToDb = e => {
         e.preventDefault()
+        const form = e.target
 
         const color = getEl('#color-picker').value
 
@@ -38,6 +39,7 @@ const AddColor = ({
             setColorAddedMess(() => 'Error: Color has not been added !')
             console.error(`Error during transaction for adding color (either getting doc or updating it): ${err}`)
         })
+        form.reset()
     }
 
     return (

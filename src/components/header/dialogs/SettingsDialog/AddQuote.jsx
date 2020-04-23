@@ -13,6 +13,7 @@ const AddQuote = ({
 
     const pushQuoteToDb = e => {
         e.preventDefault()
+        const form = e.target
         const quote = document.querySelector('#quote').value
         const author = document.querySelector('#author').value
         const objToPush = {
@@ -37,6 +38,7 @@ const AddQuote = ({
             setQuoteAddedMess(() => 'Error: Quote has not been added !')
             console.error(`Error during transaction for adding quote (either getting doc or updating it): ${err}`)
         })
+        form.reset()
     }
 
     return (

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react'
+import React, { useState, useEffect } from 'react'
 import AddQuote from './AddQuote.jsx'
 import AddColor from './AddColor.jsx'
 import DeleteColors from './DeleteColors.jsx'

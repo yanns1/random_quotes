@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useContext } from 'react'
-import { getEl } from '../../../../scripts/utils.js'
 import { firebase, db } from '../../../../scripts/init_firebase.js'
 import { AuthContext } from '../../../contexts/AuthContext.jsx'
 
@@ -40,18 +39,64 @@ const DeleteColors = ({
         }
     }, [])
 
-    console.log(colors)
-    /**
-     * @todo
-     * map over colors and return JSX for a checkbox combined with a div with background set to color
-     */
-    const colorCheckboxes = []
+    // createColorCheckbox :: String -> JSX
+    const createColorCheckbox = color => {
+        return (
+            <div className="color-checkbox" key={color}>
+                <input type="checkbox" name={color} id={color}/>
+                <div className="color-box" style={{ background: color}}></div>
+            </div>
+        )
+    }
+
+    const deleteColors = e => {
+        e.preventDefault()
+
+        const form = e.target
+        const isCheckbox = el => el.type === "checkbox"
+        const isChecked = el => el.checked === true
+        const getName = el => el.name
+        const colorsToRemove = Array.from(form.elements)
+                                .filter(isCheckbox)
+                                .filter(isChecked)
+                                .map(getName)
+
+        const userDocRef = db.collection("users").doc(userCred.uid)
+        db.runTransaction(transaction => {
+            return transaction.get(userDocRef).then(userDoc => {
+                if (!userDoc.exists) {
+                    throw "userDoc does not exist"
+                }
+                colorsToRemove.forEach(color => {
+                    transaction.update(userDocRef, {
+                        colors: firebase.firestore.FieldValue.arrayRemove(color)
+                    })
+                })
+
+            })
+        }).then(() => {
+            setColorDeletedMess(() => "Colors successfully deleted !")
+        })
+        .catch(err => {
+            setColorDeletedMess(() => "Error: Colors have not been deleted !")
+            console.error(`Error during transaction for deleting colors (either getting doc or updating it): ${err}`)
+        })
+        form.reset()
+    }
+
     return (
         <>
             <h4>Delete colors</h4>
-            <form className="settings-form" action="">
-                {colorCheckboxes}
+            <form className="settings-form" onSubmit={deleteColors} action="">
+                <div className="color-checkboxes">
+                    {colors.map(createColorCheckbox)}
+                </div>
                 <button>Delete</button>
+                {colorDeletedMess
+                    ?
+                    <div className={isErrorMess(colorDeletedMess) ? 'err-mess' : 'success-mess'}>{colorDeletedMess}</div>
+                    : null
+                }
             </form>
         </>
     )
