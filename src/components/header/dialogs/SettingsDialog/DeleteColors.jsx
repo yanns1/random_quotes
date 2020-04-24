@@ -20,7 +20,9 @@ const DeleteColors = ({
     const getStats = () => {
         const userDocRef = db.collection("users").doc(userCred.uid)
         const unsubscribe = userDocRef.onSnapshot(userDoc => {
-            setColors(() => userDoc.data().colors)
+            if (userDoc.data()) {
+                setColors(() => userDoc.data().colors)
+            }
         }, err => {
             console.error(`Error during listening for colors: ${err}`)
         })
@@ -63,24 +65,29 @@ const DeleteColors = ({
 
         const userDocRef = db.collection("users").doc(userCred.uid)
         db.runTransaction(transaction => {
-            return transaction.get(userDocRef).then(userDoc => {
-                if (!userDoc.exists) {
-                    throw "userDoc does not exist"
-                }
-                colorsToRemove.forEach(color => {
-                    transaction.update(userDocRef, {
-                        colors: firebase.firestore.FieldValue.arrayRemove(color)
-                    })
+            return transaction.get(userDocRef)
+                .then(userDoc => {
+                    if (userDoc.exists) {
+                        if (colorsToRemove.length < userDoc.data().colors.length) {
+                            colorsToRemove.forEach(color => {
+                                transaction.update(userDocRef, {
+                                    colors: firebase.firestore.FieldValue.arrayRemove(color)
+                                })
+                            })
+                        } else {
+                            return Promise.reject("You must have at least 1 color remaining !")
+                        }
+                    }
                 })
-
-            })
-        }).then(() => {
+        })
+        .then(() => {
             setColorDeletedMess(() => "Colors successfully deleted !")
         })
         .catch(err => {
-            setColorDeletedMess(() => "Error: Colors have not been deleted !")
-            console.error(`Error during transaction for deleting colors (either getting doc or updating it): ${err}`)
+            setColorDeletedMess(() => `Error: ${err}`)
+            console.error(`Error during transaction for deleting colors: ${err}`)
         })
+
         form.reset()
     }
 

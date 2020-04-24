@@ -21,16 +21,16 @@ const AddColor = ({
         const userDocRef = db.collection("users").doc(userCred.uid)
         db.runTransaction(transaction => {
             return transaction.get(userDocRef).then(userDoc => {
-                if (!userDoc.exists) {
-                    throw "userDoc does not exist"
+                if (userDoc.exists) {
+                    if (userDoc.data().colors.length >= 10) {
+                        setColorAddedMess(() => "Error: You can't have more than 10 colors ! Delete one before choosing another.")
+                        return
+                    }
+                    transaction.update(userDocRef, {
+                        "colors": firebase.firestore.FieldValue.arrayUnion(color)
+                    })
                 }
-                if (userDoc.data().colors.length >= 10) {
-                    setColorAddedMess(() => "Error: You can't have more than 10 colors ! Delete one before choosing another.")
-                    return
-                }
-                transaction.update(userDocRef, {
-                    "colors": firebase.firestore.FieldValue.arrayUnion(color)
-                })
+
             })
         }).then(() => {
             setColorAddedMess(() => 'Color successfully added !')

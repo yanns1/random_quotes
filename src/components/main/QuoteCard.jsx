@@ -22,14 +22,13 @@ const QuoteCard = () => {
     const getDataFromDb = () => {
         const userDocRef = db.collection("users").doc(userCred.uid)
         userDocRef.get().then(userDoc => {
-            if (!userDoc.exists) {
-                throw `userDoc doesn't exist`
+            if (userDoc.exists) {
+                const randomQuote = pickRandomInArr(userDoc.data().quotes)
+                const randomColor = pickRandomInArr(userDoc.data().colors)
+                setText(() => randomQuote.quote)
+                setAuthor(() => randomQuote.author)
+                setColor(() => randomColor)
             }
-            const randomQuote = pickRandomInArr(userDoc.data().quotes)
-            const randomColor = pickRandomInArr(userDoc.data().colors)
-            setText(() => randomQuote.quote)
-            setAuthor(() => randomQuote.author)
-            setColor(() => randomColor)
         }).catch(err => {
             console.error(`Error getting userDoc when trying to get a new quote: ${err}`)
         })
@@ -61,7 +60,6 @@ const QuoteCard = () => {
         } else {
             getPlaceholderData()
         }
-
         setQuoteDeletedMess(() => '')
     }
 
@@ -80,23 +78,28 @@ const QuoteCard = () => {
         }
         const userDocRef = db.collection("users").doc(userCred.uid)
         db.runTransaction(transaction => {
-            return transaction.get(userDocRef).then(userDoc => {
-                if (!userDoc.exists) {
-                    throw "userDoc does not exist"
-                }
-                transaction.update(userDocRef, {
-                    "quotes": firebase.firestore.FieldValue.arrayRemove(quoteToRemove)
+            return transaction.get(userDocRef)
+                .then(userDoc => {
+                    if (userDoc.exists) {
+                        if (userDoc.data().quotes.length > 1) {
+                            transaction.update(userDocRef, {
+                                "quotes": firebase.firestore.FieldValue.arrayRemove(quoteToRemove)
+                            })
+                        } else {
+                            return Promise.reject("You can't delete your last quote !")
+                        }
+                    }
                 })
-            })
         })
         .then(() => {
             setQuoteDeletedMess(() => 'Quote successfully deleted !')
         })
         .catch(err => {
-            setColorAddedMess(() => 'Error: Quote has not been deleted !')
-            console.error(`Error during transaction for deleting quote (either getting doc or updating it): ${err}`)
+            setQuoteDeletedMess(() => `Error: ${err}`)
+            console.error(`Error during transaction for deleting quote: ${err}`)
         })
     }
+
     /**
      * Set text and author at first render, otherwise nothing appears
      */
@@ -108,13 +111,14 @@ const QuoteCard = () => {
         changeColor()
     }, [color])
 
+
     return (
         <>
             {userCred
                 ? null
                 : <div className="not-authenticated">
                     You want to choose your own quotes and colors ? Sign in !
-            </div>
+                </div>
             }
             <div className="quote-card">
                 <div className="quote-text">

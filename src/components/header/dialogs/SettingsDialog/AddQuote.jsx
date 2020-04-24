@@ -10,8 +10,7 @@ const AddQuote = ({
     // Contexts
     const { userCred } = useContext(AuthContext)
 
-
-    const pushQuoteToDb = e => {
+    const pushQuoteToDb = async (e) => {
         e.preventDefault()
         const form = e.target
         const quote = document.querySelector('#quote').value
@@ -20,16 +19,17 @@ const AddQuote = ({
             quote,
             author
         }
+
         // Make transaction to be sure that quote doesn't already exists
         const userDocRef = db.collection("users").doc(userCred.uid)
         db.runTransaction(transaction => {
             return transaction.get(userDocRef).then(userDoc => {
-                if (!userDoc.exists) {
-                    throw "userDoc does not exist"
+                if (userDoc.exists) {
+                    transaction.update(userDocRef, {
+                        "quotes": firebase.firestore.FieldValue.arrayUnion(objToPush)
+                    })
                 }
-                transaction.update(userDocRef, {
-                    "quotes": firebase.firestore.FieldValue.arrayUnion(objToPush)
-                })
+
             })
         }).then(() => {
             setQuoteAddedMess(() => 'Quote successfully added !')
