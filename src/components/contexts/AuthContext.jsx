@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { getJSON } from '../../scripts/utils.js'
 import { auth, db } from '../../scripts/init_firebase'
 const AuthContext = React.createContext()
 
@@ -12,22 +13,33 @@ const AuthContextProvider = ({ children }) => {
     // Listen to auth changes
     auth.onAuthStateChanged(userCred => {
         setUserCred(() => userCred)
-    });
+    })
 
-    // Initialize user doc in db if not already done
-    if (userCred) {
-        const userDocRef = db.collection("users").doc(userCred.uid);
-
-        userDocRef.get().then(userDoc => {
+    /**
+     * Initialize user doc in db (with placeholder data) if not already done
+     * @function initializeUserDoc
+     * @returns {void}
+     */
+    const initializeUserDoc = async () => {
+        try {
+            const userDocRef = db.collection("users").doc(userCred.uid);
+            // absolute path is needed
+            const url = "/src/data/placeholder_data.json"
+            const placeholderData = await getJSON(url)
+            const userDoc = await userDocRef.get()
             if (!userDoc.exists) {
                 userDocRef.set({
-                    quotes: [],
-                    colors: []
+                    quotes: placeholderData.quotes,
+                    colors: placeholderData.colors
                 })
             }
-        }).catch(err => {
-            console.error("Error getting userDoc:", err)
-        })
+        } catch (err) {
+            console.error(`Error fetching placeholder data, then initializing user doc: ${err}`)
+        }
+    }
+
+    if (userCred) {
+        initializeUserDoc()
     }
 
     return (
