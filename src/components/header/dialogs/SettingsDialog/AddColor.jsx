@@ -45,6 +45,7 @@ const AddColor = ({
     return (
         <>
             <h4>Add a color</h4>
+            <div className="hint">Hint: Avoid bright colors such as yellow or white, because it will be really difficult to read after !</div>
             <form className="settings-form" onSubmit={pushColorToDb} action="">
                 <div>
                     <label htmlFor="color-picker">Choose a color: </label>

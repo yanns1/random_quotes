@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from 'react'
 import { getJSON, pickRandomInArr } from '../../scripts/utils.js'
 import { db, firebase } from '../../scripts/init_firebase.js'
 import { AuthContext } from '../contexts/AuthContext.jsx'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 const QuoteCard = () => {
     // Contexts
@@ -68,7 +69,7 @@ const QuoteCard = () => {
      */
     const changeColor = () => {
         const root = document.documentElement
-        root.style.setProperty('--primary', color)
+        root.style.setProperty('--primary-color', color)
     }
 
     const deleteQuote = e => {
@@ -113,37 +114,31 @@ const QuoteCard = () => {
 
 
     return (
-        <>
-            {userCred
-                ? null
-                : <div className="not-authenticated">
-                    You want to choose your own quotes and colors ? Sign in !
-                </div>
-            }
-            <div className="quote-card">
-                <div className="quote-text">
-                    <i className="fas fa-quote-left"></i>
-                    {text}
-                </div>
-                <div className="quote-author">- {author}</div>
-                <div className="quote-footer">
-                    <a href={"https://twitter.com/intent/tweet?text=" + encodeURIComponent('"' + text + '"  ' + '-' + author)} target="_blank" className="quote-tweet" title="Tweet this quote!"><i className="fab fa-twitter" /></a>
-                    {userCred
-                        ?
-                        <>
-                            <div className="delete-icon material-icons" data-text={text} data-author={author} onClick={deleteQuote}>delete</div>
-                            {quoteDeletedMess
-                                ?
-                                <div className={isErrorMess(quoteDeletedMess) ? 'err-mess' : 'success-mess'}>{quoteDeletedMess}</div>
-                                : null
-                            }
-                        </>
-                        : null
-                    }
-                    <button className="quote-new" onClick={getData}>New Quote</button>
-                </div>
+        <div className="quote-card">
+            <div className="quote-text">
+                <FontAwesomeIcon icon={["fas", "quote-left"]} className={"quote-icon"}></FontAwesomeIcon>
+                {text}
             </div>
-        </>
+            <div className="quote-author">- {author}</div>
+            <div className="quote-footer">
+                <a href={"https://twitter.com/intent/tweet?text=" + encodeURIComponent('"' + text + '"  ' + '-' + author)} target="_blank" className="quote-tweet" title="Tweet this quote!">
+                    <FontAwesomeIcon icon={["fab", "twitter"]} className={"twitter-icon"}></FontAwesomeIcon>
+                </a>
+                {userCred
+                    ?
+                    <div className="quote-delete">
+                        <div className="delete-icon material-icons" title="Delete quote" data-text={text} data-author={author} onClick={deleteQuote}>delete</div>
+                        {quoteDeletedMess
+                            ?
+                            <div className={isErrorMess(quoteDeletedMess) ? 'err-mess' : 'success-mess'}>{quoteDeletedMess}</div>
+                            : null
+                        }
+                    </div>
+                    : null
+                }
+                <button className="quote-new" onClick={getData}>New Quote</button>
+            </div>
+        </div>
     )
 }
 
