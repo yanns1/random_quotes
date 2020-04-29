@@ -26,6 +26,14 @@ const Navbar = () => {
         settingsDialog.showModal();
     }
 
+    const showAccountDialog = () => {
+        const accountDialog = document.querySelector('.account-dialog');
+        if (!accountDialog.showModal) {
+            dialogPolyfill.registerDialog(accountDialog);
+        }
+        accountDialog.showModal();
+    }
+
     const signOut = () => auth.signOut()
 
     return (
@@ -36,8 +44,8 @@ const Navbar = () => {
                     <SettingsDialog></SettingsDialog>
                     <AccountDialog></AccountDialog>
                     <li className="nav-link" onClick={signOut}>Logout</li>
-                    <div className="nav-link material-icons">account_circle</div>
-                    <div onClick={showSettingsDialog} className=" nav-link material-icons">settings</div>
+                    <div className="nav-link material-icons" onClick={showAccountDialog} title="Account infos">account_circle</div>
+                    <div onClick={showSettingsDialog} className=" nav-link material-icons" title="Settings">settings</div>
                 </>
                 :
                 <>
