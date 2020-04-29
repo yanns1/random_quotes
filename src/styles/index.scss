@@ -6,6 +6,7 @@
   --primary-font-family: "Raleway";
   --side-padding: 2rem;
   --opacity-before-hover: 0.7;
+  --settings-dialog-margin: 1rem 0;
 }
 
 .html {
@@ -61,6 +62,43 @@
   &:hover {
     opacity: 1;
   }
+}
+
+// ============================================================
+// DIALOGS
+.close-icon {
+  cursor: pointer;
+  position: relative;
+  display: inline-block;
+
+  &:hover {
+    transform: rotate(0.25turn);
+    transition: all 0.25s;
+  }
+}
+
+.dialog-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.err-mess {
+  margin: var(--settings-dialog-margin);
+  color: red;
+}
+
+.success-mess {
+  margin: var(--settings-dialog-margin);
+  color: green;
+}
+
+.color-picker {
+  margin: var(--settings-dialog-margin);
+}
+
+.color-checkboxes {
+  margin: var(--settings-dialog-margin);
 }
 
 // ============================================================

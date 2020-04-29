@@ -98,7 +98,7 @@ const DeleteColors = ({
                 <div className="color-checkboxes">
                     {colors.map(createColorCheckbox)}
                 </div>
-                <button>Delete</button>
+                <button className="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" type="submit">Delete</button>
                 {colorDeletedMess
                     ?
                     <div className={isErrorMess(colorDeletedMess) ? 'err-mess' : 'success-mess'}>{colorDeletedMess}</div>

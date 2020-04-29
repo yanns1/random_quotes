@@ -23,8 +23,7 @@ const AddColor = ({
             return transaction.get(userDocRef).then(userDoc => {
                 if (userDoc.exists) {
                     if (userDoc.data().colors.length >= 10) {
-                        setColorAddedMess(() => "Error: You can't have more than 10 colors ! Delete one before choosing another.")
-                        return
+                        return Promise.reject("You can't have more than 10 colors ! Delete one before choosing another.")
                     }
                     transaction.update(userDocRef, {
                         "colors": firebase.firestore.FieldValue.arrayUnion(color)
@@ -36,7 +35,7 @@ const AddColor = ({
             setColorAddedMess(() => 'Color successfully added !')
         })
         .catch(err => {
-            setColorAddedMess(() => 'Error: Color has not been added !')
+            setColorAddedMess(() => `Error: ${err}`)
             console.error(`Error during transaction for adding color (either getting doc or updating it): ${err}`)
         })
         form.reset()
@@ -45,13 +44,13 @@ const AddColor = ({
     return (
         <>
             <h4>Add a color</h4>
-            <div className="hint">Hint: Avoid bright colors such as yellow or white, because it will be really difficult to read after !</div>
+            <div className="hint"><strong>Hint:</strong> Avoid bright colors such as yellow or white, because it will be really difficult to read after !</div>
             <form className="settings-form" onSubmit={pushColorToDb} action="">
-                <div>
+                <div className="color-picker">
                     <label htmlFor="color-picker">Choose a color: </label>
                     <input type="color" id="color-picker" name="color-picker" />
                 </div>
-                <button>Add color</button>
+                <button className="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored" type="submit">Add color</button>
                 {colorAddedMess
                     ?
                     <div className={isErrorMess(colorAddedMess) ? 'err-mess' : 'success-mess'}>{colorAddedMess}</div>

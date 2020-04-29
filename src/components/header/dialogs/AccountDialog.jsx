@@ -12,8 +12,11 @@ const AccountDialog = () => {
 
     return (
         <dialog className="account-dialog mdl-dialog">
-            <h3 className="mdl-dialog__title">Account</h3>
-            <div className="close-icon material-icons" onClick={closeDialog}>close</div>
+            <div className="dialog-header">
+                <h3 className="mdl-dialog__title">Account</h3>
+                <div className="close-icon material-icons" onClick={closeDialog}>close</div>
+            </div>
+
             <div className="mdl-dialog__content">
                 <strong>Email:</strong> {userCred.email}
             </div>

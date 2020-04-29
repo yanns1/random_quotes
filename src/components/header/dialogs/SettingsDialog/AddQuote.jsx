@@ -53,7 +53,7 @@ const AddQuote = ({
                     <input className="mdl-textfield__input" type="text" id="author" />
                     <label className="mdl-textfield__label" htmlFor="author">Author...</label>
                 </div>
-                <button type="submit">Add quote</button>
+                <button className="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored">Add quote</button>
                 {quoteAddedMess
                     ?
                     <div className={isErrorMess(quoteAddedMess) ? 'err-mess' : 'success-mess'}>{quoteAddedMess}</div>
