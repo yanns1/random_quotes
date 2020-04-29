@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useContext } from 'react'
-import { getJSON, pickRandomInArr } from '../../scripts/utils.js'
+import { pickRandomInArr } from '../../scripts/utils.js'
 import { db, firebase } from '../../scripts/init_firebase.js'
 import { AuthContext } from '../contexts/AuthContext.jsx'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import placeholderData from '../../scripts/placeholder_data.js'
 
 const QuoteCard = () => {
     // Contexts
@@ -35,19 +36,12 @@ const QuoteCard = () => {
         })
     }
 
-    const getPlaceholderData = async () => {
-        // absolute path is needed
-        const url = "/src/data/placeholder_data.json"
-        try {
-            const placeholderData = await getJSON(url)
-            const randomQuote = pickRandomInArr(placeholderData.quotes)
-            const randomColor = pickRandomInArr(placeholderData.colors)
-            setText(() => randomQuote.quote)
-            setAuthor(() => randomQuote.author)
-            setColor(() => randomColor)
-        } catch (err) {
-            console.error(`Error fetching placeholder data: ${err}`)
-        }
+    const getPlaceholderData = () => {
+        const randomQuote = pickRandomInArr(placeholderData.quotes)
+        const randomColor = pickRandomInArr(placeholderData.colors)
+        setText(() => randomQuote.quote)
+        setAuthor(() => randomQuote.author)
+        setColor(() => randomColor)
     }
 
     /**
