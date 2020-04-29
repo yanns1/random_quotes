@@ -6,7 +6,7 @@ The idea for this project comes from the [freeCodeCamp][fcc] curriculum.
 
 In fact this is the same design that the example provided, but I just experimented using Firestore database to use my own quotes and colors.
 
-So this [project][deploy] is normally deployed via Firebase.
+So this [project][deploy] is normally deployed with Netlify.
 
 [fcc]: https://www.freecodecamp.org/
-[deploy]: https://random-quotes-dbabe.web.app/
+[deploy]: https://randomq.netlify.app/
