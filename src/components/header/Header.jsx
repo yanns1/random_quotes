@@ -1,6 +1,7 @@
 import React, { useContext } from 'react'
 import Navbar from './Navbar.jsx'
 import { AuthContext } from '../contexts/AuthContext.jsx'
+import randomQuotesLogo from '../../img/random_quotes_logo.svg'
 
 const Header = () => {
     // Contexts
@@ -9,7 +10,8 @@ const Header = () => {
     return (
         <>
             <div className="subheader">
-                <a className="logo" href="/">RQ</a>
+                <a href="/">
+                    <img class="logo" src={randomQuotesLogo} alt="Random Quotes Logo" /></a>
                 <Navbar></Navbar>
             </div>
             {userCred
