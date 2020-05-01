@@ -6,7 +6,8 @@
   "scripts": {
     "build": "webpack --mode=production",
     "dev": "webpack --mode=development",
-    "server": "webpack-dev-server --open"
+    "server": "webpack-dev-server --open",
+    "start": "http-server dist"
   },
   "keywords": [],
   "author": "",
@@ -43,7 +44,6 @@
     "@fortawesome/react-fontawesome": "^0.1.9",
     "dialog-polyfill": "^0.5.1",
     "firebase": "^7.14.1",
-    "ramda": "^0.27.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-firebaseui": "^4.1.0",
