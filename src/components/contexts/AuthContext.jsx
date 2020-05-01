@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
-import { getJSON } from '../../scripts/utils.js'
 import { auth, db } from '../../scripts/init_firebase'
+import placeholderData from '../../scripts/placeholder_data.js'
 const AuthContext = React.createContext()
 
 /**
@@ -20,26 +20,23 @@ const AuthContextProvider = ({ children }) => {
      * @function initializeUserDoc
      * @returns {void}
      */
-    const initializeUserDoc = async () => {
-        try {
-            const userDocRef = db.collection("users").doc(userCred.uid);
-            // absolute path is needed
-            const url = "/src/data/placeholder_data.json"
-            const placeholderData = await getJSON(url)
-            const userDoc = await userDocRef.get()
+    const initializeUserDoc = placeholderData => {
+        const userDocRef = db.collection("users").doc(userCred.uid);
+        userDocRef.get().then(userDoc => {
             if (!userDoc.exists) {
                 userDocRef.set({
                     quotes: placeholderData.quotes,
                     colors: placeholderData.colors
                 })
             }
-        } catch (err) {
-            console.error(`Error fetching placeholder data, then initializing user doc: ${err}`)
-        }
+        }).catch(err => {
+            console.error(`Error initializing user doc: ${err}`)
+
+        })
     }
 
     if (userCred) {
-        initializeUserDoc()
+        initializeUserDoc(placeholderData)
     }
 
     return (

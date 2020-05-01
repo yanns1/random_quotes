@@ -11,7 +11,7 @@ const Header = () => {
         <>
             <div className="subheader">
                 <a href="/">
-                    <img class="logo" src={randomQuotesLogo} alt="Random Quotes Logo" /></a>
+                    <img className="logo" src={randomQuotesLogo} alt="Random Quotes Logo" /></a>
                 <Navbar></Navbar>
             </div>
             {userCred
