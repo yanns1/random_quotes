@@ -24,6 +24,9 @@ module.exports = {
             }
         }
     },
+    // addition - add source-map support
+    devtool: "source-map",
+
     module: {
         rules: [
             {
@@ -49,11 +52,11 @@ module.exports = {
 
             },
             {
-                test: /\.(js|jsx)$/,
+                test: /\.(js|jsx|ts|tsx)$/,
                 exclude: /node_modules/,
                 use: [
                     {
-                        loader: "babel-loader"
+                        loader: "ts-loader"
                     }
                 ]
             },
@@ -67,6 +70,12 @@ module.exports = {
                         }
                     }
                 ]
+            },
+            {
+                enforce: "pre",
+                test: /\.js$/,
+                exclude: /node_modules/,
+                loader: "source-map-loader"
             }
         ]
     },
