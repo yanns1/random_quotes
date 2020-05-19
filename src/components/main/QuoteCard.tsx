@@ -1,42 +1,42 @@
 import React, { useState, useEffect, useContext } from 'react'
-import { pickRandomInArr } from '../../scripts/utils.js'
-import { db, firebase } from '../../scripts/init_firebase.js'
-import { AuthContext } from '../contexts/AuthContext.jsx'
+
+import { pickRandomInArr, isErrorMess } from '../../scripts/utils.ts'
+import { db, firebase } from '../../scripts/init_firebase.ts'
+
+import { AuthContext } from '../contexts/AuthContext.tsx'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import placeholderData from '../../scripts/placeholder_data.js'
+import placeholderData from '../../scripts/placeholder_data.ts'
 
-const QuoteCard = () => {
-    // Contexts
-    const { userCred } = useContext(AuthContext)
-    // States
-    const [text, setText] = useState('')
-    const [author, setAuthor] = useState('')
-    const [color, setColor] = useState('')
-    const [quoteDeletedMess, setQuoteDeletedMess] = useState('')
+import { UserDoc, QuoteObj } from '../../interfaces/i_db.ts'
+import { UserCred } from '../../interfaces/i_auth.ts'
 
-    const isErrorMess = mess => /^Error/.test(mess)
+interface Props {
+}
 
-    /**
-     * Set random quote and random color as states, from db data
-     * @function getQuoteAndColor
-     * @returns {void}
-     */
-    const getDataFromDb = () => {
+const QuoteCard: React.FC<Props> = (): JSX.Element | null => {
+    const { userCred } = useContext<UserCred>(AuthContext)
+    const [text, setText] = useState<string>('')
+    const [author, setAuthor] = useState<string>('')
+    const [color, setColor] = useState<string>('')
+    const [quoteDeletedMess, setQuoteDeletedMess] = useState<string>('')
+
+
+    const getDataFromDb = (): void => {
         const userDocRef = db.collection("users").doc(userCred.uid)
-        userDocRef.get().then(userDoc => {
+        userDocRef.get().then((userDoc: any) => {
             if (userDoc.exists) {
-                const randomQuote = pickRandomInArr(userDoc.data().quotes)
-                const randomColor = pickRandomInArr(userDoc.data().colors)
+                const randomQuote = pickRandomInArr<QuoteObj>(userDoc.data().quotes)
+                const randomColor = pickRandomInArr<string>(userDoc.data().colors)
                 setText(() => randomQuote.quote)
                 setAuthor(() => randomQuote.author)
                 setColor(() => randomColor)
             }
-        }).catch(err => {
+        }).catch((err: any) => {
             console.error(`Error getting userDoc when trying to get a new quote: ${err}`)
         })
     }
 
-    const getPlaceholderData = () => {
+    const getPlaceholderData = (placeholderData: UserDoc): void => {
         const randomQuote = pickRandomInArr(placeholderData.quotes)
         const randomColor = pickRandomInArr(placeholderData.colors)
         setText(() => randomQuote.quote)
@@ -46,35 +46,31 @@ const QuoteCard = () => {
 
     /**
      * Choose from where to get data depending on userCred + reset message from quote deletion
-     * @function getData
-     * @returns {void}
+     * @func getData
      */
-    const getData = () => {
+    const getData = (): void => {
         if (userCred) {
             getDataFromDb()
         } else {
-            getPlaceholderData()
+            getPlaceholderData(placeholderData)
         }
         setQuoteDeletedMess(() => '')
     }
 
-    /**
-     * Change page primary color depending on color state
-     */
-    const changeColor = () => {
+    const changeColor = (): void => {
         const root = document.documentElement
         root.style.setProperty('--primary-color', color)
     }
 
-    const deleteQuote = e => {
+    const deleteQuote = (e: React.MouseEvent<HTMLDivElement, MouseEvent>): void => {
         const quoteToRemove = {
-            quote: e.target.dataset.text,
-            author: e.target.dataset.author
+            quote: e.target!.dataset.text,
+            author: e.target!.dataset.author
         }
         const userDocRef = db.collection("users").doc(userCred.uid)
-        db.runTransaction(transaction => {
+        db.runTransaction((transaction: any) => {
             return transaction.get(userDocRef)
-                .then(userDoc => {
+                .then((userDoc: any) => {
                     if (userDoc.exists) {
                         if (userDoc.data().quotes.length > 1) {
                             transaction.update(userDocRef, {
@@ -86,18 +82,15 @@ const QuoteCard = () => {
                     }
                 })
         })
-        .then(() => {
-            setQuoteDeletedMess(() => 'Quote successfully deleted !')
-        })
-        .catch(err => {
-            setQuoteDeletedMess(() => `Error: ${err}`)
-            console.error(`Error during transaction for deleting quote: ${err}`)
-        })
+            .then(() => {
+                setQuoteDeletedMess(() => 'Quote successfully deleted !')
+            })
+            .catch((err: any) => {
+                setQuoteDeletedMess(() => `Error: ${err}`)
+                console.error(`Error during transaction for deleting quote: ${err}`)
+            })
     }
 
-    /**
-     * Set text and author at first render, otherwise nothing appears
-     */
     useEffect(() => {
         getData()
     }, [userCred])

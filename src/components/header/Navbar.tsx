@@ -1,40 +1,45 @@
 import React, { useContext } from 'react'
-import { auth } from '../../scripts/init_firebase.js'
-import { AuthContext } from '../contexts/AuthContext.jsx'
+import { getEl } from '../../scripts/utils.ts'
+import { auth } from '../../scripts/init_firebase.ts'
+import { AuthContext } from '../contexts/AuthContext.tsx'
 import dialogPolyfill from 'dialog-polyfill'
-import AuthDialog from './dialogs/AuthDialog.jsx'
-import SettingsDialog from './dialogs/SettingsDialog/SettingsDialog.jsx'
-import AccountDialog from './dialogs/AccountDialog.jsx'
+import AuthDialog from './dialogs/AuthDialog.tsx'
+import SettingsDialog from './dialogs/SettingsDialog/SettingsDialog.tsx'
+import AccountDialog from './dialogs/AccountDialog.tsx'
 
-const Navbar = () => {
-    // Contexts
-    const { userCred } = useContext(AuthContext)
+import { UserCred } from '../../interfaces/i_auth.ts'
 
-    const showAuthDialog = () => {
-        const authDialog = document.querySelector('.auth-dialog');
+interface Props {
+}
+
+const Navbar: React.FC<Props> = (): JSX.Element | null => {
+    const { userCred } = useContext<UserCred>(AuthContext)
+
+    const showAuthDialog = (): void => {
+        const authDialog = getEl('.auth-dialog');
         if (!authDialog.showModal) {
             dialogPolyfill.registerDialog(authDialog);
         }
         authDialog.showModal();
     }
 
-    const showSettingsDialog = () => {
-        const settingsDialog = document.querySelector('.settings-dialog');
+    const showSettingsDialog = (): void => {
+        const settingsDialog = getEl('.settings-dialog');
         if (!settingsDialog.showModal) {
             dialogPolyfill.registerDialog(settingsDialog);
         }
         settingsDialog.showModal();
     }
 
-    const showAccountDialog = () => {
-        const accountDialog = document.querySelector('.account-dialog');
+    const showAccountDialog = (): void => {
+        const accountDialog = getEl('.account-dialog');
         if (!accountDialog.showModal) {
             dialogPolyfill.registerDialog(accountDialog);
         }
         accountDialog.showModal();
     }
 
-    const signOut = () => auth.signOut()
+    const signOut = (): void => auth.signOut()
 
     return (
         <nav className="navbar">

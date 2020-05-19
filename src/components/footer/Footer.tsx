@@ -1,10 +1,10 @@
 import React from 'react'
 
-/**
- * @file Creates the footer
- * @requires react
- */
-const Footer = () => {
+interface Props {
+
+}
+
+const Footer: React.FC<Props> = (): JSX.Element | null => {
     return (
         <div>
             {/* Laisser tt aligné pour garder les espaces */}

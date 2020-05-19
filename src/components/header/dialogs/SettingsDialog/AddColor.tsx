@@ -1,17 +1,28 @@
 import React, { useContext } from 'react'
-import { getEl } from '../../../../scripts/utils.js'
-import { firebase, db } from '../../../../scripts/init_firebase.js'
-import { AuthContext } from '../../../contexts/AuthContext.jsx'
 
-const AddColor = ({
+import { getEl } from '../../../../scripts/utils.ts'
+import { firebase, db } from '../../../../scripts/init_firebase.ts'
+
+import { AuthContext } from '../../../contexts/AuthContext.tsx'
+
+import { UserCred } from '../../../../interfaces/i_auth.ts'
+
+
+interface Props {
+    children: never[];
+    colorAddedMess: string;
+    setColorAddedMess: Dispatch<SetStateAction<string>>;
+    isErrorMess: (mess: string) => boolean;
+}
+
+const AddColor: React.FC<Props> = ({
     colorAddedMess,
     setColorAddedMess,
     isErrorMess
-}) => {
-    // Contexts
-    const { userCred } = useContext(AuthContext)
+}): JSX.Element | null => {
+    const { userCred } = useContext<UserCred>(AuthContext)
 
-    const pushColorToDb = e => {
+    const pushColorToDb = (e: React.FormEvent<HTMLFormElement>): void => {
         e.preventDefault()
         const form = e.target
 
@@ -19,8 +30,8 @@ const AddColor = ({
 
         // Make transaction to be sure that quote doesn't already exists
         const userDocRef = db.collection("users").doc(userCred.uid)
-        db.runTransaction(transaction => {
-            return transaction.get(userDocRef).then(userDoc => {
+        db.runTransaction((transaction: any): Promise<any> => {
+            return transaction.get(userDocRef).then((userDoc: any) => {
                 if (userDoc.exists) {
                     if (userDoc.data().colors.length >= 10) {
                         return Promise.reject("You can't have more than 10 colors ! Delete one before choosing another.")
@@ -31,14 +42,17 @@ const AddColor = ({
                 }
 
             })
-        }).then(() => {
-            setColorAddedMess(() => 'Color successfully added !')
+        }).then((): void => {
+            setColorAddedMess('Color successfully added !')
         })
-        .catch(err => {
-            setColorAddedMess(() => `Error: ${err}`)
-            console.error(`Error during transaction for adding color (either getting doc or updating it): ${err}`)
-        })
-        form.reset()
+            .catch((err: any): void => {
+                setColorAddedMess(`Error: ${err}`)
+                console.error(`Error during transaction for adding color (either getting doc or updating it): ${err}`)
+            })
+
+        if (form instanceof HTMLFormElement) {
+            form.reset()
+        }
     }
 
     return (
@@ -60,5 +74,6 @@ const AddColor = ({
         </>
     )
 }
+
 
 export default AddColor

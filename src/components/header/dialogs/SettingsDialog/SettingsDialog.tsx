@@ -1,30 +1,36 @@
 import React, { useState, useEffect } from 'react'
-import AddQuote from './AddQuote.jsx'
-import AddColor from './AddColor.jsx'
-import DeleteColors from './DeleteColors.jsx'
 
-const SettingsDialog = () => {
-    // States
-    const [quoteAddedMess, setQuoteAddedMess] = useState('')
-    const [colorAddedMess, setColorAddedMess] = useState('')
-    const [colorDeletedMess, setColorDeletedMess] = useState('')
+import { isErrorMess, getEl, getEls } from '../../../../scripts/utils.ts'
 
-    const isErrorMess = mess => /^Error/.test(mess)
+import AddQuote from './AddQuote.tsx'
+import AddColor from './AddColor.tsx'
+import DeleteColors from './DeleteColors.tsx'
 
-    const closeDialog = () => {
-        const authDialog = document.querySelector('.settings-dialog');
+
+interface Props {
+
+}
+
+const SettingsDialog: React.FC<Props> = (): JSX.Element | null => {
+    const [quoteAddedMess, setQuoteAddedMess] = useState<string>('')
+    const [colorAddedMess, setColorAddedMess] = useState<string>('')
+    const [colorDeletedMess, setColorDeletedMess] = useState<string>('')
+
+    const closeDialog = (): void => {
+        const authDialog = getEl('.settings-dialog');
         authDialog.close();
 
         //  Reset forms
-        const settingsForms = Array.from(document.querySelectorAll('.settings-form'))
-        settingsForms.forEach(form => {
-            form.reset()
+        const settingsForms = Array.from(getEls('.settings-form'))
+        settingsForms.forEach((form: unknown): void => {
+            if (form instanceof HTMLFormElement) {
+                form.reset()
+            }
         })
 
-        // Reset messages
-        setQuoteAddedMess(() => '')
-        setColorAddedMess(() => '')
-        setColorDeletedMess(() => '')
+        setQuoteAddedMess('')
+        setColorAddedMess('')
+        setColorDeletedMess('')
     }
 
 
@@ -53,7 +59,7 @@ const SettingsDialog = () => {
                 </AddColor>
                 <DeleteColors
                     colorDeletedMess={colorDeletedMess}
-                    setColorDeletedMess={setColorDeletedMess}                    isErrorMess={isErrorMess}
+                    setColorDeletedMess={setColorDeletedMess} isErrorMess={isErrorMess}
                 >
                 </DeleteColors>
             </div>

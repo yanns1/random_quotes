@@ -1,29 +1,39 @@
 import React, { useState, useEffect, useContext } from 'react'
-import { firebase, db } from '../../../../scripts/init_firebase.js'
-import { AuthContext } from '../../../contexts/AuthContext.jsx'
 
-const DeleteColors = ({
+import { isCheckbox, isChecked, getNameOfInput } from '../../../../scripts/init_firebase.ts'
+import { firebase, db } from '../../../../scripts/init_firebase.ts'
+
+import { AuthContext } from '../../../contexts/AuthContext.tsx'
+
+import { UserCred } from '../../../../interfaces/i_auth.ts'
+
+interface Props {
+    children: never[];
+    colorDeletedMess: string;
+    setColorDeletedMess: Dispatch<SetStateAction<string>>;
+    isErrorMess: (mess: string) => boolean;
+}
+
+const DeleteColors: React.FC<Props> = ({
     colorDeletedMess,
     setColorDeletedMess,
     isErrorMess
-}) => {
-    // Contexts
-    const { userCred } = useContext(AuthContext)
-    // States
-    const [colors, setColors] = useState([])
+}): JSX.Element | null => {
+    const { userCred } = useContext<UserCred>(AuthContext)
+    const [colors, setColors] = useState<[]>([])
 
     /**
      * Listen to db and set colors state accordingly
      * @function getStats
      * @returns {function} - unsuscribe function
      */
-    const getStats = () => {
+    const getStats = (): any => {
         const userDocRef = db.collection("users").doc(userCred.uid)
-        const unsubscribe = userDocRef.onSnapshot(userDoc => {
+        const unsubscribe = userDocRef.onSnapshot((userDoc: any): void => {
             if (userDoc.data()) {
                 setColors(() => userDoc.data().colors)
             }
-        }, err => {
+        }, (err: any): void => {
             console.error(`Error during listening for colors: ${err}`)
         })
 
@@ -36,37 +46,37 @@ const DeleteColors = ({
     useEffect(() => {
         const unsubscribe = getStats()
 
-        return () => {
+        return (): void => {
             unsubscribe()
         }
     }, [])
 
-    // createColorCheckbox :: String -> JSX
-    const createColorCheckbox = color => {
+    const createColorCheckbox = (color: string): JSX.Element => {
         return (
             <div className="color-checkbox" key={color}>
-                <input type="checkbox" name={color} id={color}/>
-                <div className="color-box" style={{ background: color}}></div>
+                <input type="checkbox" name={color} id={color} />
+                <div className="color-box" style={{ background: color }}></div>
             </div>
         )
     }
 
-    const deleteColors = e => {
+    const deleteColors = (e: React.FormEvent<HTMLFormElement>): void => {
         e.preventDefault()
 
         const form = e.target
-        const isCheckbox = el => el.type === "checkbox"
-        const isChecked = el => el.checked === true
-        const getName = el => el.name
-        const colorsToRemove = Array.from(form.elements)
-                                .filter(isCheckbox)
-                                .filter(isChecked)
-                                .map(getName)
+        const formElements = form instanceof HTMLFormElement ? Array.from(form.elements) : undefined
+        /**
+         * @todo
+         */
+        const colorsToRemove = formElements
+            .filter(isCheckbox)
+            .filter(isChecked)
+            .map(getNameOfInput)
 
         const userDocRef = db.collection("users").doc(userCred.uid)
-        db.runTransaction(transaction => {
+        db.runTransaction((transaction: any): Promise<any> => {
             return transaction.get(userDocRef)
-                .then(userDoc => {
+                .then((userDoc: any): void | Promise<any> => {
                     if (userDoc.exists) {
                         if (colorsToRemove.length < userDoc.data().colors.length) {
                             colorsToRemove.forEach(color => {
@@ -80,15 +90,17 @@ const DeleteColors = ({
                     }
                 })
         })
-        .then(() => {
-            setColorDeletedMess(() => "Colors successfully deleted !")
-        })
-        .catch(err => {
-            setColorDeletedMess(() => `Error: ${err}`)
-            console.error(`Error during transaction for deleting colors: ${err}`)
-        })
+            .then((): void => {
+                setColorDeletedMess("Colors successfully deleted !")
+            })
+            .catch((err: any): void => {
+                setColorDeletedMess(`Error: ${err}`)
+                console.error(`Error during transaction for deleting colors: ${err}`)
+            })
 
-        form.reset()
+        if (form instanceof HTMLFormElement) {
+            form.reset()
+        }
     }
 
     return (

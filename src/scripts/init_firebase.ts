@@ -22,4 +22,15 @@ firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 const auth = firebase.auth();
 
+db.enablePersistence()
+    .catch((err: any) => {
+        if (err.code === 'failed-precondition') {
+            // probably multiple tabs open at once
+            console.log('persistence failed')
+        } else if (err.code === 'unimplemented') {
+            // lack of browser support
+            console.log('persistence is not available')
+        }
+    })
+
 export { firebase, db, auth }

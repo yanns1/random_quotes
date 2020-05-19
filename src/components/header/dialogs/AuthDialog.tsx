@@ -1,9 +1,15 @@
 import React from 'react'
-import FirebaseUI from '../FirebaseUI.jsx'
+import FirebaseUI from '../FirebaseUI.tsx'
 
-const AuthDialog = () => {
-    const closeDialog = () => {
-        const authDialog = document.querySelector('.auth-dialog');
+import { getEl } from '../../../scripts/utils.ts'
+
+
+interface Props {
+}
+
+const AuthDialog: React.FC<Props> = (): JSX.Element | null => {
+    const closeDialog = (): void => {
+        const authDialog = getEl('.auth-dialog');
         authDialog.close();
     }
 

@@ -1,10 +1,10 @@
 import React from 'react'
-import Header from './header/Header.jsx'
-import QuoteCard from './main/QuoteCard.jsx'
-import Footer from './footer/Footer.jsx'
-import { AuthContextProvider } from './contexts/AuthContext.jsx'
+import Header from './header/Header.tsx'
+import QuoteCard from './main/QuoteCard.tsx'
+import Footer from './footer/Footer.tsx'
+import { AuthContextProvider } from './contexts/AuthContext.tsx'
 
-const App = () => {
+const App: React.FC = () => {
     return (
         <AuthContextProvider>
             <header className="header">
@@ -21,3 +21,4 @@ const App = () => {
 }
 
 export default App
+

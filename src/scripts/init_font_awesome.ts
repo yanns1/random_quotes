@@ -7,5 +7,7 @@ import { faQuoteLeft } from '@fortawesome/free-solid-svg-icons'
 // import * as f from '@fortawesome/free-solid-svg-icons'
 // console.dir(f)
 
+// workaround for this issue: https://github.com/FortAwesome/react-fontawesome/issues/217
+const myLibrary: any = library
 
-library.add(fab, faQuoteLeft)
+myLibrary.add(fab, faQuoteLeft)

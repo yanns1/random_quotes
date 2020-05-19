@@ -1,8 +1,16 @@
 import React from 'react'
-import { firebase, auth } from '../../scripts/init_firebase.js'
+import { firebase, auth } from '../../scripts/init_firebase.ts'
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth'
 
-const FirebaseUI = () => {
+interface Props {
+}
+
+const FirebaseUI: React.FC<Props> = (): JSX.Element | null => {
+
+    /**
+     * @todo
+     * .d types for config
+     */
     const uiConfig = {
         signInSuccessUrl: "http://localhost:8080/",
         signInOptions: [

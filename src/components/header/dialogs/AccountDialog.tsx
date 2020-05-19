@@ -1,12 +1,19 @@
 import React, { useContext } from 'react'
-import { AuthContext } from '../../contexts/AuthContext.jsx'
+import { AuthContext } from '../../contexts/AuthContext.tsx'
 
-const AccountDialog = () => {
-    // Contexts
-    const { userCred } = useContext(AuthContext)
+import { getEl } from '../../../scripts/utils.ts'
 
-    const closeDialog = () => {
-        const accountDialog = document.querySelector('.account-dialog');
+import { UserCred } from '../../../interfaces/i_auth.ts'
+
+
+interface Props {
+}
+
+const AccountDialog: React.FC<Props> = (): JSX.Element | null => {
+    const { userCred } = useContext<UserCred>(AuthContext)
+
+    const closeDialog = (): void => {
+        const accountDialog = getEl('.account-dialog');
         accountDialog.close();
     }
 

@@ -1,29 +1,42 @@
 import React, { useContext } from 'react'
-import { firebase, db } from '../../../../scripts/init_firebase.js'
-import { AuthContext } from '../../../contexts/AuthContext.jsx'
 
-const AddQuote = ({
+import { getEl } from '../../../../scripts/utils.ts'
+import { firebase, db } from '../../../../scripts/init_firebase.ts'
+
+import { AuthContext } from '../../../contexts/AuthContext.tsx'
+
+import { QuoteObj } from '../../../../interfaces/i_db.ts'
+import { UserCred } from '../../../../interfaces/i_auth.ts'
+
+
+interface Props {
+    children: never[];
+    quoteAddedMess: string;
+    setQuoteAddedMess: Dispatch<SetStateAction<string>>;
+    isErrorMess: (mess: string) => boolean;
+}
+
+const AddQuote: React.FC<Props> = ({
     quoteAddedMess,
     setQuoteAddedMess,
     isErrorMess
-}) => {
-    // Contexts
-    const { userCred } = useContext(AuthContext)
+}): JSX.Element | null => {
+    const { userCred } = useContext<UserCred>(AuthContext)
 
-    const pushQuoteToDb = async (e) => {
+    const pushQuoteToDb = async (e: React.FormEvent<HTMLFormElement>): void => {
         e.preventDefault()
         const form = e.target
-        const quote = document.querySelector('#quote').value
-        const author = document.querySelector('#author').value
-        const objToPush = {
+        const quote = getEl('#quote').value
+        const author = getEl('#author').value
+        const objToPush: QuoteObj = {
             quote,
             author
         }
 
         // Make transaction to be sure that quote doesn't already exists
         const userDocRef = db.collection("users").doc(userCred.uid)
-        db.runTransaction(transaction => {
-            return transaction.get(userDocRef).then(userDoc => {
+        db.runTransaction((transaction: any): Promise<any> => {
+            return transaction.get(userDocRef).then((userDoc: any): void => {
                 if (userDoc.exists) {
                     transaction.update(userDocRef, {
                         "quotes": firebase.firestore.FieldValue.arrayUnion(objToPush)
@@ -31,14 +44,17 @@ const AddQuote = ({
                 }
 
             })
-        }).then(() => {
-            setQuoteAddedMess(() => 'Quote successfully added !')
+        }).then((): void => {
+            setQuoteAddedMess('Quote successfully added !')
         })
-        .catch(err => {
-            setQuoteAddedMess(() => 'Error: Quote has not been added !')
-            console.error(`Error during transaction for adding quote (either getting doc or updating it): ${err}`)
-        })
-        form.reset()
+            .catch((err: any): void => {
+                setQuoteAddedMess('Error: Quote has not been added !')
+                console.error(`Error during transaction for adding quote (either getting doc or updating it): ${err}`)
+            })
+
+        if (form instanceof HTMLFormElement) {
+            form.reset()
+        }
     }
 
     return (
